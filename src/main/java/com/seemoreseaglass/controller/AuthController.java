@@ -1,6 +1,9 @@
 package com.seemoreseaglass.controller;
 
+import com.seemoreseaglass.entity.Title;
 import com.seemoreseaglass.service.UserService;
+import com.seemoreseaglass.repository.TitleRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 public class AuthController {
@@ -31,11 +35,11 @@ public class AuthController {
                         Model model) {
         try {
             userService.register(username, password);
-            return "redirect:/login"; // 登録成功時はログインページへ
+            return "redirect:/login";
         } catch (IllegalArgumentException ex) {
-            model.addAttribute("error", ex.getMessage()); // エラーメッセージを渡す
-            model.addAttribute("username", username);     // 入力内容をフォームに保持
-            return "register";                            // 登録ページを再表示
+            model.addAttribute("error", ex.getMessage());
+            model.addAttribute("username", username);
+            return "register";
         }
     }
 
@@ -44,4 +48,11 @@ public class AuthController {
         model.addAttribute("username", principal.getName());
         return "home";
     }
+
+    @GetMapping("/search")
+    public String search(@RequestParam String q, Model model) {
+        List<Title> results = TitleRepository.findByPrimaryTitleContainingIgnoreCase(q);
+        model.addAttribute("results", results);
+        return "search";
+    }    
 }
