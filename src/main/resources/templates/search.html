@@ -1,0 +1,11 @@
+<form th:action="@{/search}" method="get">
+    <input name="q" placeholder="Enter movie title"/>
+    <button type="submit">Search</button>
+</form>
+
+<ul>
+  <li th:each="title : ${results}">
+    <strong th:text="${title.primaryTitle}"></strong> -
+    <span th:text="${title.genres}"></span>
+  </li>
+</ul>
