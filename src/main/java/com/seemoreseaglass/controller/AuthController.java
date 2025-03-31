@@ -19,6 +19,9 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private TitleRepository titleRepository;
+
     @GetMapping("/login")
     public String login() {
         return "login";
@@ -51,8 +54,8 @@ public class AuthController {
 
     @GetMapping("/search")
     public String search(@RequestParam String q, Model model) {
-        List<Title> results = TitleRepository.findByPrimaryTitleContainingIgnoreCase(q);
+        List<Title> results = titleRepository.findByPrimaryTitleContainingIgnoreCase(q);
         model.addAttribute("results", results);
         return "search";
-    }    
+    }
 }
